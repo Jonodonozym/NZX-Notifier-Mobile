@@ -126,8 +126,13 @@ export default class AnnouncementsPage extends Component {
     }
 
     private renderItem: ListRenderItem<Announcement> = ({item}) => (
-        <TouchableOpacity style={styles.container} onPress={(event) => {
-            this.onAnnouncementTap(item)
+        <TouchableOpacity style={styles.container} onLongPress={(event) => {
+            this.showContextMenu(item)
+        }} onPress={(event) => {
+            if (item.pdfurl != undefined && item.pdfurl != '')
+                this.openURL(item.pdfurl)
+            else
+                this.openURL(item.url)
         }}>
             <Text style={[styles.companyID, {minWidth: 96, maxWidth: 96}]}>{item.company.id}</Text>
             <View style={[styles.rightContainer, {flex: 6}]}>
@@ -141,7 +146,7 @@ export default class AnnouncementsPage extends Component {
         </TouchableOpacity>
     );
 
-    private onAnnouncementTap(announcement: Announcement) {
+    private showContextMenu(announcement: Announcement) {
         DialogManager.show({
             animationDuration: 300,
             width: '75%',
