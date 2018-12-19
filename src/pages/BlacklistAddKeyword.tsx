@@ -1,7 +1,7 @@
 import {Component} from "react";
 import {StyleSheet, Text, TextInput, View} from "react-native";
 import * as React from "react";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import {NavigationActions, StackActions} from 'react-navigation';
 import UserConfigProvider from "../services/user-config.provider";
 import {Button} from "react-native-elements";

@@ -1,7 +1,7 @@
 import {Component} from "react";
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import * as React from "react";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import {NavigationActions, StackActions} from 'react-navigation';
 import UserConfigProvider from "../services/user-config.provider";
 import {Button} from "react-native-elements";
@@ -50,30 +50,6 @@ export default class BlacklistAddCompany extends Component {
             />
         )
     }
-
-    // private renderSearch() {  // Doesn't freaking work )':
-    //     return (
-    //         <Autocomplete
-    //             defaultValue={this.query}
-    //             data={this.searchResults}
-    //             onChangeText={(query: string) => {
-    //                 this.query = query
-    //                 CompanyProvider.search(query).then((companies) => {
-    //                     this.searchResults = companies
-    //                     this.forceUpdate()
-    //                 })
-    //             }}
-    //             renderItem={(item: Company) => {
-    //                 <TouchableOpacity onPress={() => {
-    //                     this.query = item.id;
-    //                     this.searchResults = new Array<Company>();
-    //                     this.forceUpdate();
-    //                 }}>
-    //                     <Text>{item.id} - {item.name}</Text>
-    //                 </TouchableOpacity>
-    //             }}
-    //         />)
-    // }
 
     private navigate(page: string) {
         this.props.navigation.dispatch(StackActions.reset({

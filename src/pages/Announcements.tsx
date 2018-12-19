@@ -1,97 +1,87 @@
 import * as React from "react";
-import {Component} from "react";
-import {
-    FlatList,
-    StyleSheet,
-    View,
-    Text,
-    ListRenderItem,
-    Linking,
-    RefreshControl,
-    ScrollView,
-    TouchableOpacity
-} from "react-native";
-import DialogManager, {ScaleAnimation, DialogContent} from 'react-native-dialog-component';
-import {Announcement} from "../entity/Announcement";
+import { Component } from "react";
+import { FlatList, Linking, ListRenderItem, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import DialogManager, { DialogContent, ScaleAnimation } from 'react-native-dialog-component';
+import { Icon, SearchBar } from "react-native-elements";
+import Header from "../components/Header/Header";
+import { Announcement } from "../entity/Announcement";
+import AnnouncementsProvider from "../services/announcements.provider";
 import AuthService from "../services/auth.service";
 import UserConfigProvider from "../services/user-config.provider";
-import AnnouncementsProvider from "../services/announcements.provider";
-import {Icon, SearchBar} from "react-native-elements";
 import Colors from "../theme/colors";
-import Header from "../components/Header";
 
 export default class AnnouncementsPage extends Component {
-    private announcements: Array<Announcement> = Array<Announcement>();
-    private isFetching: boolean = true;
-    private isConnected: boolean = true;
-    private isRefreshing: boolean = false;
+    private announcements: Array<Announcement> = Array<Announcement>()
+    private isFetching: boolean = true
+    private isConnected: boolean = true
+    private isRefreshing: boolean = false
 
-    private search: string = '';
-    private showSearch: boolean = false;
+    private search: string = ''
+    private showSearch: boolean = false
 
     constructor(props: Readonly<{}>) {
-        super(props);
+        super(props)
         AuthService.isRegistered().then((registered) => {
             if (!registered)
-                AuthService.register().then(() => this.update());
+                AuthService.register().then(() => this.update())
             else {
-                UserConfigProvider.refresh();
-                this.update();
+                UserConfigProvider.refresh()
+                this.update()
             }
         })
     }
 
     public update() {
-        this.forceUpdate();
+        this.forceUpdate()
         if (this.search == '')
             this.checkForErrors(AnnouncementsProvider.getRecent(0).then((ann) => {
-                this.setAnnouncements(ann);
-            }));
+                this.setAnnouncements(ann)
+            }))
         else
             this.checkForErrors(AnnouncementsProvider.search(this.search).then((ann) => {
-                this.setAnnouncements(ann);
+                this.setAnnouncements(ann)
             }))
     }
 
     private checkForErrors(p: Promise<any>) {
         p.catch((e) => {
-            this.isFetching = false;
-            this.isConnected = false;
-            this.isRefreshing = false;
-            this.announcements = [];
+            this.isFetching = false
+            this.isConnected = false
+            this.isRefreshing = false
+            this.announcements = []
             this.forceUpdate()
         })
     }
 
-    public setAnnouncements(announcements: Array<Announcement> | null) {
-        this.isFetching = false;
-        this.isConnected = true;
-        this.isRefreshing = false;
+    public setAnnouncements(announcements: Array<Announcement> | undefined) {
+        this.isFetching = false
+        this.isConnected = true
+        this.isRefreshing = false
         if (announcements == null)
-            this.announcements = [];
+            this.announcements = []
         else
-            this.announcements = announcements;
+            this.announcements = announcements
         this.forceUpdate()
     }
 
     render() {
         return (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
                 <Header title='Announcements'
-                        onPress={() => {
-                            this.showSearch = !this.showSearch;
-                            if (!this.showSearch)
-                                this.update();
-                            else
-                                this.forceUpdate()
-                        }}
-                        nextPageIconSet='feather'
-                        nextPageIcon='search'
-                        {...this.props}/>
+                    nextPageOnPress={() => {
+                        this.showSearch = !this.showSearch
+                        if (!this.showSearch)
+                            this.update()
+                        else
+                            this.forceUpdate()
+                    }}
+                    nextPageIconSet='feather'
+                    nextPageIcon='search'
+                    {...this.props} />
                 {this.renderMainContent()}
                 {this.renderSearchbar()}
             </View>
-        );
+        )
     }
 
     private renderMainContent() {
@@ -101,13 +91,13 @@ export default class AnnouncementsPage extends Component {
                     <RefreshControl
                         refreshing={this.isRefreshing}
                         onRefresh={() => {
-                            this.isRefreshing = true;
+                            this.isRefreshing = true
                             this.update()
                         }}
                     />
                 }
-                onScroll={({nativeEvent}) => {
-                    if (this.isCloseToBottom(nativeEvent))
+                onScroll={scrollEvent => {
+                    if (this.isCloseToBottom(scrollEvent))
                         this.fetchMore()
                 }}
             >
@@ -116,53 +106,53 @@ export default class AnnouncementsPage extends Component {
         )
     }
 
-    isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-        const paddingToBottom = 640;
+    isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        const paddingToBottom = 640
         return layoutMeasurement.height + contentOffset.y >=
-            contentSize.height - paddingToBottom;
-    };
+            contentSize.height - paddingToBottom
+    }
 
     private fetchMore() {
         if (this.isFetching || !this.isConnected || this.isRefreshing)
-            return;
+            return
 
-        this.isRefreshing = true;
-        let lastID = this.announcements[this.announcements.length - 1].id;
+        this.isRefreshing = true
+        let lastID = this.announcements[this.announcements.length - 1].id
         AnnouncementsProvider.getRecent(lastID).then((recent) => {
             console.log(recent)
-            this.setAnnouncements(this.announcements.concat(recent));
+            this.setAnnouncements(this.announcements.concat(recent))
         })
     }
 
     private renderMessageOrList() {
         if (this.isFetching)
-            return (<Text style={styles.noAnnouncements}>Fetching announcements{"\n"}Please wait...</Text>);
+            return (<Text style={styles.noAnnouncements}>Fetching announcements{"\n"}Please wait...</Text>)
         if (!this.isConnected)
             return (<Text style={styles.noAnnouncements}>Failed to connect to the server{"\n"}Please check your internet
-                connection{"\n"}or try again later</Text>);
+                connection{"\n"}or try again later</Text>)
         if (this.announcements.length == 0)
-            return (<Text style={styles.noAnnouncements}>No announcements found</Text>);
+            return (<Text style={styles.noAnnouncements}>No announcements found</Text>)
         return (
             <FlatList
                 data={this.announcements}
                 renderItem={this.renderItem}
-            />);
+            />)
     }
 
-    private renderItem: ListRenderItem<Announcement> = ({item}) => (
+    private renderItem: ListRenderItem<Announcement> = ({ item }) => (
         <View style={styles.container}>
             <TouchableOpacity style={styles.container}
-                              onLongPress={(event) => {
-                                  this.showContextMenu(item)
-                              }}
-                              onPress={(event) => {
-                                  if (item.pdfurl != undefined && item.pdfurl != '')
-                                      this.openURL(item.pdfurl)
-                                  else
-                                      this.openURL(item.url)
-                              }}>
-                <Text style={[styles.companyID, {minWidth: 96, maxWidth: 96}]}>{item.company.id}</Text>
-                <View style={[styles.rightContainer, {flex: 6}]}>
+                onLongPress={(event) => {
+                    this.showContextMenu(item)
+                }}
+                onPress={(event) => {
+                    if (item.pdfurl != undefined && item.pdfurl != '')
+                        this.openURL(item.pdfurl)
+                    else
+                        this.openURL(item.url)
+                }}>
+                <Text style={[styles.companyID, { minWidth: 96, maxWidth: 96 }]}>{item.company.id}</Text>
+                <View style={[styles.rightContainer, { flex: 6 }]}>
                     <View style={styles.topLine}>
                         <Text style={styles.announcementType}>{item.type}</Text>
                         <Text style={styles.announcementTime}>{this.formatTime(item.time)}</Text>
@@ -170,12 +160,12 @@ export default class AnnouncementsPage extends Component {
                     <Text style={styles.announcementTitle}>{item.title}</Text>
                 </View>
             </TouchableOpacity>
-            <Icon type='feather' name='more-vertical' size={48} containerStyle={{minWidth: 32, maxWidth: 32}}
-                  onPress={() => {
-                      this.showContextMenu(item)
-                  }}/>
+            <Icon type='feather' name='more-vertical' size={48} containerStyle={{ minWidth: 32, maxWidth: 32 }}
+                onPress={() => {
+                    this.showContextMenu(item)
+                }} />
         </View>
-    );
+    )
 
     private showContextMenu(announcement: Announcement) {
         DialogManager.show({
@@ -188,18 +178,18 @@ export default class AnnouncementsPage extends Component {
                 </DialogContent>
             ),
         }, () => {
-            console.log('callback - show');
-        });
+            console.log('callback - show')
+        })
     }
 
     private popupContent(announcement: Announcement) {
         return (
-            <View style={{marginLeft: 8, marginRight: 8, flexDirection: "column"}}>
+            <View style={{ marginLeft: 8, marginRight: 8, flexDirection: "column" }}>
                 <TouchableOpacity style={styles.optionWrapper} onPress={() => this.openURL(announcement.pdfurl)}>
-                    <Text style={[styles.optionText, {fontWeight: 'bold'}]}>Open PDF</Text>
+                    <Text style={[styles.optionText, { fontWeight: 'bold' }]}>Open PDF</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.optionWrapper} onPress={() => this.openURL(announcement.url)}>
-                    <Text style={[styles.optionText, {fontWeight: 'bold'}]}>Open NZX Site</Text>
+                    <Text style={[styles.optionText, { fontWeight: 'bold' }]}>Open NZX Site</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.optionWrapper} onPress={() => this.blacklistType(announcement)}>
                     <Text style={styles.optionText}>More from {announcement.company.id}</Text>
@@ -211,11 +201,11 @@ export default class AnnouncementsPage extends Component {
                     <Text style={styles.optionText}>Blacklist {announcement.type}</Text>
                 </TouchableOpacity>
             </View>
-        );
+        )
     }
 
     private openURL(url: string) {
-        Linking.canOpenURL(url).then(supported => {
+        Linking.canOpenURL(url).then((supported: boolean) => {
             if (supported)
                 Linking.openURL(url)
         })
@@ -223,7 +213,7 @@ export default class AnnouncementsPage extends Component {
 
     private more(a: Announcement) {
         AnnouncementsProvider.search(a.company.id).then((ann) => {
-            this.setAnnouncements(ann);
+            this.setAnnouncements(ann)
         })
     }
 
@@ -240,38 +230,38 @@ export default class AnnouncementsPage extends Component {
     }
 
     formatTime = function (time: number): string {
-        let date: Date = new Date(time);
+        let date: Date = new Date(time)
 
-        let offset = new Date().getTime() - date.getTime();
+        let offset = new Date().getTime() - date.getTime()
 
         if (offset > (1000 * 3600 * 24))
-            return date.getDate() + " / " + date.getMonth() + " / " + date.getFullYear();
+            return date.getDate() + " / " + date.getMonth() + " / " + date.getFullYear()
 
-        let hours = date.getHours() % 12;
+        let hours = date.getHours() % 12
         if (hours == 0)
-            hours = 12;
+            hours = 12
         return hours + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() + " " + (date.getHours() >= 12 ? "am" : "pm")
-    };
+    }
 
     private renderSearchbar() {
         if (!this.showSearch)
-            return null;
+            return null
         return (
-            <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
+            <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <SearchBar placeholder='Search company, type or title'
-                           containerStyle={{backgroundColor: Colors.LIGHT_BLUE}}
-                           inputStyle={{backgroundColor: 'white', padding: 0, paddingTop: 0, paddingBottom: 0}}
-                           clearIcon={{type: 'font-awesome', name: 'chevron-left'}}
-                           autoFocus={true}
-                           onChangeText={(input: string) => {
-                               this.search = input;
-                               this.update();
-                           }}
-                           onClearText={() => {
-                               this.showSearch = false;
-                               this.search = '';
-                               this.update()
-                           }}/>
+                    containerStyle={{ backgroundColor: Colors.LIGHT_BLUE }}
+                    inputStyle={{ backgroundColor: 'white', padding: 0, paddingTop: 0, paddingBottom: 0 }}
+                    clearIcon={{ type: 'font-awesome', name: 'chevron-left' }}
+                    autoFocus={true}
+                    onChangeText={(input: string) => {
+                        this.search = input
+                        this.update()
+                    }}
+                    onClearText={() => {
+                        this.showSearch = false
+                        this.search = ''
+                        this.update()
+                    }} />
             </View>
         )
     }
@@ -336,4 +326,4 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 28
     }
-});
+})
