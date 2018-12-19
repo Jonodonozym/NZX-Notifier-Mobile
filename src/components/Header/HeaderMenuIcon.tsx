@@ -1,11 +1,11 @@
 import { SFC } from "react";
 import { Icon } from "react-native-elements";
 import Colors from "../../theme/colors";
-import { goTo } from "./PageNavigator";
+import { goToPage } from "../../functions/PageNavigator";
 
 type Props = {
     title: string,
-    navigator?: Navigator,
+    navigation?: Navigator,
 
     previousPage?: string,
     previousPageIcon?: string,
@@ -24,8 +24,7 @@ export const HeaderMenuIcon: SFC<Props> = (props) => {
             underlayColor={Colors.LIGHT_BLUE}
             type={group}
             name={name}
-            // @ts-ignore
-            onPress={() => goTo(props.navigator, props.previousPage)}
+            onPress={() => goToPage(props.navigation, props.previousPage)}
         />
     )
 }

@@ -1,12 +1,12 @@
 import { SFC } from "react";
 import { Icon } from "react-native-elements";
 import Colors from "../../theme/colors";
-import { goTo } from "./PageNavigator";
+import { goToPage } from "../../functions/PageNavigator";
 
 
 type Props = {
     nextPage?: string,
-    navigator?: Navigator,
+    navigation?: Navigator,
 
     nextPageIcon?: string,
     nextPageIconSet?: string,
@@ -16,7 +16,7 @@ type Props = {
 export const HeaderNextPageIcon: SFC<Props> = (props) => {
     let name: string = props.nextPageIcon ? props.nextPageIcon : "plus";
     let group: string = props.nextPageIconSet ? props.nextPageIconSet : "entypo";
-    let onPress: () => any = props.nextPageOnPress ? props.nextPageOnPress : () => goTo(props.navigator, props.nextPage);
+    let onPress: () => any = props.nextPageOnPress ? props.nextPageOnPress : () => goToPage(props.navigation, props.nextPage);
     return (
         <Icon containerStyle={{ backgroundColor: Colors.LIGHT_BLUE }}
             size={32}

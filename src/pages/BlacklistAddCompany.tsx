@@ -1,21 +1,20 @@
-import {Component} from "react";
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import * as React from "react";
+import { Component } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Button } from "react-native-elements";
 import Header from "../components/Header/Header";
-import {NavigationActions, StackActions} from 'react-navigation';
+import { Company } from "../entity/Company";
+import { goToPage } from "../functions/PageNavigator";
+import { CompanyProvider } from "../services/companies.provider";
 import UserConfigProvider from "../services/user-config.provider";
-import {Button} from "react-native-elements";
 import Colors from "../theme/colors";
-import {Company} from "../entity/Company";
-import {CompanyProvider} from "../services/companies.provider";
-import Autocomplete from "react-native-autocomplete-input";
 
 
 export default class BlacklistAddCompany extends Component {
     render() {
         return (
-            <View style={{flex: 1, backgroundColor: 'white'}}>
-                <Header title='Blacklist Company' previousPage='Company' {...this.props}/>
+            <View style={{ flex: 1, backgroundColor: 'white' }}>
+                <Header title='Blacklist Company' previousPage='Company' {...this.props} />
                 <Text style={styles.baseText}>Please enter the company{"\n"}name or id you wish to blacklist</Text>
                 {this.renderSearch()}
                 <Button
@@ -23,14 +22,14 @@ export default class BlacklistAddCompany extends Component {
                     title="Blacklist Company"
                     onPress={async () => {
                         if (this.state == null || this.state.text == '')
-                            this.navigate('Company');
+                            goToPage(this.props.navigation, 'Company');
                         else {
                             let c: Company[] = await CompanyProvider.search(this.state.text);
                             console.log(c[0]);
                             if (c != undefined && c.length != 0)
-                                UserConfigProvider.blacklistAddCompany(c[0]).then(() => this.navigate('Company'));
+                                UserConfigProvider.blacklistAddCompany(c[0]).then(() => goToPage(this.props.navigation, 'Company'));
                             else
-                                this.navigate('Company')
+                                goToPage(this.props.navigation, 'Company')
                         }
                     }}
                 />
@@ -42,23 +41,13 @@ export default class BlacklistAddCompany extends Component {
         return (
             <TextInput
                 style={styles.input}
-                onChangeText={(text) => this.state = {text}}
+                onChangeText={(text) => this.state = { text }}
                 editable={true}
                 maxLength={40}
                 placeholder={"keyword or phrase"}
                 autoCorrect={false}
             />
         )
-    }
-
-    private navigate(page: string) {
-        this.props.navigation.dispatch(StackActions.reset({
-            index: 0,
-            key: null,
-            actions: [
-                NavigationActions.navigate({routeName: page})
-            ]
-        }));
     }
 }
 
