@@ -41,14 +41,15 @@ export default class AppHeader extends Component<Props> {
     }
 
     private renderLeftButton() {
-        if (!this.props.previousPage)
-            return (
-                <Left style={sideButtonStyle}>
-                    <HeaderMenuIcon {...this.props}></HeaderMenuIcon>
-                </Left>
-            );
+        if (this.props.previousPage)
+            return <HeaderBackArrow {...this.props}></HeaderBackArrow>
 
-        return <HeaderBackArrow {...this.props}></HeaderBackArrow>
+        return (
+            <Left style={sideButtonStyle}>
+                <HeaderMenuIcon {...this.props}></HeaderMenuIcon>
+            </Left>
+        );
+
     }
 
     private renderCenter() {

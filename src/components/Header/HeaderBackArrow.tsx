@@ -1,10 +1,10 @@
+import * as React from "react";
 import { SFC } from "react";
 import { Icon } from "react-native-elements";
 import Colors from "../../theme/colors";
 import { goToPage } from "../../functions/PageNavigator";
 
 type Props = {
-    title: string,
     navigation?: Navigator,
 
     previousPage?: string,

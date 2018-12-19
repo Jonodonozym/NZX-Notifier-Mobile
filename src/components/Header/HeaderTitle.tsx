@@ -1,3 +1,4 @@
+import React from "react";
 import { SFC } from "react";
 import { StyleSheet, Text } from "react-native";
 

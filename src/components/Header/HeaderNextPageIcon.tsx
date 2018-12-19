@@ -1,4 +1,5 @@
 import { SFC } from "react";
+import React from "react";
 import { Icon } from "react-native-elements";
 import Colors from "../../theme/colors";
 import { goToPage } from "../../functions/PageNavigator";
