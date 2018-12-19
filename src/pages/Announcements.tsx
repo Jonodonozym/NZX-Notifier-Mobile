@@ -96,18 +96,42 @@ export default class AnnouncementsPage extends Component {
 
     private renderMainContent() {
         return (
-            <ScrollView refreshControl={
-                <RefreshControl
-                    refreshing={this.isRefreshing}
-                    onRefresh={() => {
-                        this.isRefreshing = true;
-                        this.update()
-                    }}
-                />
-            }>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.isRefreshing}
+                        onRefresh={() => {
+                            this.isRefreshing = true;
+                            this.update()
+                        }}
+                    />
+                }
+                onScroll={({nativeEvent}) => {
+                    if (this.isCloseToBottom(nativeEvent))
+                        this.fetchMore()
+                }}
+            >
                 {this.renderMessageOrList()}
             </ScrollView>
         )
+    }
+
+    isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+        const paddingToBottom = 640;
+        return layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom;
+    };
+
+    private fetchMore() {
+        if (this.isFetching || !this.isConnected || this.isRefreshing)
+            return;
+
+        this.isRefreshing = true;
+        let lastID = this.announcements[this.announcements.length - 1].id;
+        AnnouncementsProvider.getRecent(lastID).then((recent) => {
+            console.log(recent)
+            this.setAnnouncements(this.announcements.concat(recent));
+        })
     }
 
     private renderMessageOrList() {
@@ -126,24 +150,31 @@ export default class AnnouncementsPage extends Component {
     }
 
     private renderItem: ListRenderItem<Announcement> = ({item}) => (
-        <TouchableOpacity style={styles.container} onLongPress={(event) => {
-            this.showContextMenu(item)
-        }} onPress={(event) => {
-            if (item.pdfurl != undefined && item.pdfurl != '')
-                this.openURL(item.pdfurl)
-            else
-                this.openURL(item.url)
-        }}>
-            <Text style={[styles.companyID, {minWidth: 96, maxWidth: 96}]}>{item.company.id}</Text>
-            <View style={[styles.rightContainer, {flex: 6}]}>
-                <View style={styles.topLine}>
-                    <Text style={styles.announcementType}>{item.type}</Text>
-                    <Text style={styles.announcementTime}>{this.formatTime(item.time)}</Text>
+        <View style={styles.container}>
+            <TouchableOpacity style={styles.container}
+                              onLongPress={(event) => {
+                                  this.showContextMenu(item)
+                              }}
+                              onPress={(event) => {
+                                  if (item.pdfurl != undefined && item.pdfurl != '')
+                                      this.openURL(item.pdfurl)
+                                  else
+                                      this.openURL(item.url)
+                              }}>
+                <Text style={[styles.companyID, {minWidth: 96, maxWidth: 96}]}>{item.company.id}</Text>
+                <View style={[styles.rightContainer, {flex: 6}]}>
+                    <View style={styles.topLine}>
+                        <Text style={styles.announcementType}>{item.type}</Text>
+                        <Text style={styles.announcementTime}>{this.formatTime(item.time)}</Text>
+                    </View>
+                    <Text style={styles.announcementTitle}>{item.title}</Text>
                 </View>
-                <Text style={styles.announcementTitle}>{item.title}</Text>
-            </View>
-            <Icon type='feather' name='more-vertical' size={48} containerStyle={{minWidth: 32, maxWidth: 32}}/>
-        </TouchableOpacity>
+            </TouchableOpacity>
+            <Icon type='feather' name='more-vertical' size={48} containerStyle={{minWidth: 32, maxWidth: 32}}
+                  onPress={() => {
+                      this.showContextMenu(item)
+                  }}/>
+        </View>
     );
 
     private showContextMenu(announcement: Announcement) {
