@@ -3,12 +3,12 @@ import { Component } from "react";
 import { FlatList, Linking, ListRenderItem, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, NativeScrollEvent } from "react-native";
 import DialogManager, { DialogContent, ScaleAnimation } from 'react-native-dialog-component';
 import { Icon, SearchBar } from "react-native-elements";
-import Header from "../components/Header/Header";
-import { Announcement } from "../entity/Announcement";
-import AnnouncementsProvider from "../services/announcements.provider";
-import AuthService from "../services/auth.service";
-import UserConfigProvider from "../services/user-config.provider";
-import Colors from "../theme/colors";
+import Header from "../../components/Header/Header";
+import { Announcement } from "../../entity/Announcement";
+import AnnouncementsProvider from "../../services/announcements.provider";
+import AuthService from "../../services/auth.service";
+import UserConfigProvider from "../../services/user-config.provider";
+import Colors from "../../theme/colors";
 
 export default class AnnouncementsPage extends Component {
     private announcements: Array<Announcement> = Array<Announcement>()

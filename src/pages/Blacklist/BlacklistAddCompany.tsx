@@ -2,12 +2,12 @@ import * as React from "react";
 import { Component } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { Button } from "react-native-elements";
-import Header from "../components/Header/Header";
-import { Company } from "../entity/Company";
-import { goToPage } from "../functions/PageNavigator";
-import { CompanyProvider } from "../services/companies.provider";
-import UserConfigProvider from "../services/user-config.provider";
-import Colors from "../theme/colors";
+import Header from "../../components/Header/Header";
+import { Company } from "../../entity/Company";
+import { goToPage } from "../../functions/PageNavigator";
+import { CompanyProvider } from "../../services/companies.provider";
+import UserConfigProvider from "../../services/user-config.provider";
+import Colors from "../../theme/colors";
 
 
 export default class BlacklistAddCompany extends Component {

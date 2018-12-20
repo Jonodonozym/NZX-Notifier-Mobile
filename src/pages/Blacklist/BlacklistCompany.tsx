@@ -1,11 +1,11 @@
 import {Component} from "react";
 import {FlatList, ListRenderItem, StyleSheet, Text, View} from "react-native";
 import * as React from "react";
-import Header from "../components/Header/Header";
-import UserConfigProvider from "../services/user-config.provider";
+import Header from "../../components/Header/Header";
+import UserConfigProvider from "../../services/user-config.provider";
 import {Icon} from "react-native-elements";
-import Colors from "../theme/colors";
-import {Company} from "../entity/Company";
+import Colors from "../../theme/colors";
+import {Company} from "../../entity/Company";
 
 export default class BlacklistCompany extends Component {
     render() {

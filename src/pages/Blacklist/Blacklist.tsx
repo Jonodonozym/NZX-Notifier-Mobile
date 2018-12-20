@@ -3,7 +3,7 @@ import {createBottomTabNavigator, createStackNavigator} from 'react-navigation';
 import BlacklistCompany from "./BlacklistCompany";
 import BlacklistKeyword from "./BlacklistKeyword";
 import BlacklistType from "./BlacklistType";
-import Colors from "../theme/colors";
+import Colors from "../../theme/colors";
 import BlacklistAddKeyword from "./BlacklistAddKeyword";
 import BlacklistAddCompany from "./BlacklistAddCompany";
 

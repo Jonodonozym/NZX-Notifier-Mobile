@@ -1,11 +1,11 @@
 import * as React from "react";
 import {Component} from "react";
 import {FlatList, View} from "react-native";
-import Header from "../components/Header/Header";
-import {AnnouncementType} from "../enum/AnnouncementType";
+import Header from "../../components/Header/Header";
+import {AnnouncementType} from "../../enum/AnnouncementType";
 import {CheckBox} from "react-native-elements";
-import UserConfigProvider from "../services/user-config.provider";
-import Colors from "../theme/colors";
+import UserConfigProvider from "../../services/user-config.provider";
+import Colors from "../../theme/colors";
 
 export default class BlacklistType extends Component {
 

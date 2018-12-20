@@ -1,11 +1,11 @@
 import {Component} from "react";
 import {FlatList, ListRenderItem, StyleSheet, Text, View} from "react-native";
 import * as React from "react";
-import Header from "../components/Header/Header";
-import UserConfigProvider from "../services/user-config.provider";
-import {Announcement} from "../entity/Announcement";
+import Header from "../../components/Header/Header";
+import UserConfigProvider from "../../services/user-config.provider";
+import {Announcement} from "../../entity/Announcement";
 import {Icon} from "react-native-elements";
-import Colors from "../theme/colors";
+import Colors from "../../theme/colors";
 
 export default class BlacklistKeyword extends Component {
 
