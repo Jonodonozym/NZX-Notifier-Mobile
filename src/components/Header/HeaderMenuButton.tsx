@@ -1,14 +1,12 @@
-import React from "react";
-import { SFC } from "react";
+import React, { SFC } from "react";
 import { Icon } from "react-native-elements";
 import Colors from "../../theme/colors";
-import { goToPage } from "../../functions/PageNavigator";
 
 type Props = {
     navigation?: Navigator,
 }
 
-export const HeaderMenuIcon: SFC<Props> = (props) => {
+export const HeaderMenuButton: SFC<Props> = (props) => {
     return (
         <Icon containerStyle={{ backgroundColor: Colors.LIGHT_BLUE }}
             iconStyle={{ paddingLeft: 8 }}
@@ -16,7 +14,8 @@ export const HeaderMenuIcon: SFC<Props> = (props) => {
             color={'white'}
             underlayColor={Colors.LIGHT_BLUE}
             name="menu"
-            onPress={() => props.navigation.openDrawer()}
+            //@ts-ignore
+            onPress={() => props.navigation!.openDrawer()}
         />
     )
 }

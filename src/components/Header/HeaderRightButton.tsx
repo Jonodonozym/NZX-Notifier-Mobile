@@ -9,15 +9,15 @@ type Props = {
     nextPage?: string,
     navigation?: Navigator,
 
-    nextPageIcon?: string,
-    nextPageIconSet?: string,
-    nextPageOnPress?: () => any,
+    rightButtonIcon?: string,
+    rightButtonIconSet?: string,
+    onRightButtonPress?: () => any,
 }
 
 export const HeaderNextPageIcon: SFC<Props> = (props) => {
-    let name: string = props.nextPageIcon ? props.nextPageIcon : "plus";
-    let group: string = props.nextPageIconSet ? props.nextPageIconSet : "entypo";
-    let onPress: () => any = props.nextPageOnPress ? props.nextPageOnPress : () => goToPage(props.navigation, props.nextPage);
+    let name: string = props.rightButtonIcon ? props.rightButtonIcon : "plus";
+    let group: string = props.rightButtonIconSet ? props.rightButtonIconSet : "entypo";
+    let onPress: () => any = props.onRightButtonPress ? props.onRightButtonPress : () => goToPage(props.navigation, props.nextPage);
     return (
         <Icon containerStyle={{ backgroundColor: Colors.LIGHT_BLUE }}
             size={32}

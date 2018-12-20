@@ -9,12 +9,19 @@ import { CompanyProvider } from "../../services/companies.provider";
 import UserConfigProvider from "../../services/user-config.provider";
 import Colors from "../../theme/colors";
 
+type Props = {
+    navigation: Navigator
+}
 
-export default class BlacklistAddCompany extends Component {
+type State = {
+    text: string
+}
+
+export default class BlacklistAddCompany extends Component<Props, State> {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
-                <Header title='Blacklist Company' previousPage='Company' {...this.props} />
+                <Header title='Blacklist Company' leftButtonPageLink='Company' {...this.props} />
                 <Text style={styles.baseText}>Please enter the company{"\n"}name or id you wish to blacklist</Text>
                 {this.renderSearch()}
                 <Button
@@ -25,7 +32,6 @@ export default class BlacklistAddCompany extends Component {
                             goToPage(this.props.navigation, 'Company');
                         else {
                             let c: Company[] = await CompanyProvider.search(this.state.text);
-                            console.log(c[0]);
                             if (c != undefined && c.length != 0)
                                 UserConfigProvider.blacklistAddCompany(c[0]).then(() => goToPage(this.props.navigation, 'Company'));
                             else

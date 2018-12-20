@@ -1,20 +1,20 @@
 import * as React from "react";
 import { SFC } from "react";
 import { Icon } from "react-native-elements";
-import Colors from "../../theme/colors";
 import { goToPage } from "../../functions/PageNavigator";
+import Colors from "../../theme/colors";
 
 type Props = {
     navigation?: Navigator,
 
-    previousPage?: string,
-    previousPageIcon?: string,
-    previousPageIconSet?: string
+    leftButtonPageLink?: string,
+    leftButtonIcon?: string,
+    leftButtonIconSet?: string
 }
 
-export const HeaderBackArrow: SFC<Props> = (props) => {
-    let name: string = props.previousPageIcon ? props.previousPageIcon : "back";
-    let group: string = props.previousPageIconSet ? props.previousPageIconSet : "entypo";
+export const HeaderLeftButton: SFC<Props> = (props) => {
+    let name: string = props.leftButtonIcon ? props.leftButtonIcon : "back";
+    let group: string = props.leftButtonIconSet ? props.leftButtonIconSet : "entypo";
 
     return (
         <Icon containerStyle={{ backgroundColor: Colors.LIGHT_BLUE }}
@@ -24,7 +24,7 @@ export const HeaderBackArrow: SFC<Props> = (props) => {
             underlayColor={Colors.LIGHT_BLUE}
             type={group}
             name={name}
-            onPress={() => goToPage(props.navigation, props.previousPage)}
+            onPress={() => goToPage(props.navigation, props.leftButtonPageLink!)}
         />
     )
 }

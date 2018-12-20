@@ -1,17 +1,17 @@
-import {Component} from "react";
-import {FlatList, ListRenderItem, StyleSheet, Text, View} from "react-native";
 import * as React from "react";
+import { Component } from "react";
+import { FlatList, ListRenderItem, StyleSheet, Text, View } from "react-native";
+import { Icon } from "react-native-elements";
 import Header from "../../components/Header/Header";
+import { Company } from "../../entity/Company";
 import UserConfigProvider from "../../services/user-config.provider";
-import {Icon} from "react-native-elements";
 import Colors from "../../theme/colors";
-import {Company} from "../../entity/Company";
 
 export default class BlacklistCompany extends Component {
     render() {
         return (
-            <View style={{backgroundColor: 'white', flex: 1}}>
-                <Header title='Blacklist Companies' nextPage='CompanyAdd' {...this.props}/>
+            <View style={{ backgroundColor: 'white', flex: 1 }}>
+                <Header title='Blacklist Companies' rightButtonPageLink='CompanyAdd' {...this.props} />
                 {this.renderMessageOrList()}
             </View>
         )
@@ -30,27 +30,27 @@ export default class BlacklistCompany extends Component {
             />);
     }
 
-    private renderItem: ListRenderItem<Company> = ({item}) => (
+    private renderItem: ListRenderItem<Company> = ({ item }) => (
         <View style={styles.container}>
-            <View style={{flex: 7, flexDirection: "column"}}>
-                <View style={{flex:2}}>
+            <View style={{ flex: 7, flexDirection: "column" }}>
+                <View style={{ flex: 2 }}>
                     <Text style={styles.id}>{item.id}</Text>
                 </View>
-                <View style={{flex:1}}>
+                <View style={{ flex: 1 }}>
                     <Text style={styles.name}>{item.name}</Text>
                 </View>
             </View>
-            <View style={{flex: 1}}>
-                <Icon containerStyle={{backgroundColor: 'white'}}
-                      size={32}
-                      color={Colors.LIGHT_BLUE}
-                      underlayColor='white'
-                      type='entypo'
-                      name='cross'
-                      onPress={() => {
-                          UserConfigProvider.blacklistRemoveCompany(item);
-                          this.forceUpdate()
-                      }}
+            <View style={{ flex: 1 }}>
+                <Icon containerStyle={{ backgroundColor: 'white' }}
+                    size={32}
+                    color={Colors.LIGHT_BLUE}
+                    underlayColor='white'
+                    type='entypo'
+                    name='cross'
+                    onPress={() => {
+                        UserConfigProvider.blacklistRemoveCompany(item);
+                        this.forceUpdate()
+                    }}
                 />
             </View>
         </View>

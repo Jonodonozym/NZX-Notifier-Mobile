@@ -1,5 +1,4 @@
-import React from "react";
-import { SFC } from "react";
+import React, { SFC } from "react";
 import { StyleSheet, Text } from "react-native";
 
 type Props = {

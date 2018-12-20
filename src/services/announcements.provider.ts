@@ -1,4 +1,4 @@
-import {Announcement} from "../entity/Announcement";
+import { Announcement } from "../entity/Announcement";
 import HTTPClient from "./HTTPClient";
 
 export default class AnnouncementsProvider {

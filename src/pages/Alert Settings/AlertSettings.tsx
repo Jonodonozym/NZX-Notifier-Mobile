@@ -1,12 +1,12 @@
-import { Component } from "react";
-import { StyleSheet, View } from "react-native";
 import { Body, Header, Text } from "native-base";
 import * as React from "react";
-import AppHeader from "../../components/Header/Header";
-import Colors from "../../theme/colors";
+import { Component } from "react";
+import { StyleSheet, View } from "react-native";
 import { CheckBox } from "react-native-elements";
-import UserConfigProvider from "../../services/user-config.provider";
+import AppHeader from "../../components/Header/Header";
 import { PushNotificationType } from "../../enum/PushNotificationType";
+import UserConfigProvider from "../../services/user-config.provider";
+import Colors from "../../theme/colors";
 
 type SectionProps = {
     title: string,

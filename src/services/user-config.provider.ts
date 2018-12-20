@@ -1,7 +1,7 @@
-import {UserConfig} from "../entity/UserConfig";
-import {Company} from "../entity/Company";
-import {AnnouncementType} from "../enum/AnnouncementType";
-import {PushNotificationType} from "../enum/PushNotificationType";
+import { Company } from "../entity/Company";
+import { UserConfig } from "../entity/UserConfig";
+import { AnnouncementType } from "../enum/AnnouncementType";
+import { PushNotificationType } from "../enum/PushNotificationType";
 import HTTPClient from "./HTTPClient";
 
 export default class UserConfigProvider {
@@ -39,32 +39,32 @@ export default class UserConfigProvider {
 
     public static async blacklistAddCompany(company: Company): Promise<any> {
         UserConfigProvider.config.companyBlacklist.add(company);
-        return HTTPClient.POST("/config/blacklist/company/add", {companyId: company.id}).catch(e=>{});
+        return HTTPClient.POST("/config/blacklist/company/add", { companyId: company.id }).catch(e => { });
     }
 
     public static async blacklistRemoveCompany(company: Company): Promise<any> {
         UserConfigProvider.config.companyBlacklist.delete(company);
-        return HTTPClient.POST("/config/blacklist/company/remove", {companyId: company.id}).catch(e=>{});
+        return HTTPClient.POST("/config/blacklist/company/remove", { companyId: company.id }).catch(e => { });
     }
 
     public static async blacklistAddType(type: AnnouncementType): Promise<any> {
         UserConfigProvider.config.typeBlacklist.add(type);
-        return HTTPClient.POST("/config/blacklist/type/add", {type: type}).catch(e=>{});
+        return HTTPClient.POST("/config/blacklist/type/add", { type: type }).catch(e => { });
     }
 
     public static async blacklistRemoveType(type: AnnouncementType): Promise<any> {
         UserConfigProvider.config.typeBlacklist.delete(type);
-        return HTTPClient.POST("/config/blacklist/type/remove", {type: type}).catch(e=>{});
+        return HTTPClient.POST("/config/blacklist/type/remove", { type: type }).catch(e => { });
     }
 
     public static async blacklistAddKeyword(keyword: string): Promise<any> {
         UserConfigProvider.config.keywordBlacklist.add(keyword);
-        return HTTPClient.POST("/config/blacklist/keyword/add", {keyword: keyword}).catch(e=>{});
+        return HTTPClient.POST("/config/blacklist/keyword/add", { keyword: keyword }).catch(e => { });
     }
 
     public static async blacklistRemoveKeyword(keyword: string): Promise<any> {
         UserConfigProvider.config.keywordBlacklist.delete(keyword);
-        return HTTPClient.POST("/config/blacklist/keyword/remove", {keyword: keyword}).catch(e=>{});
+        return HTTPClient.POST("/config/blacklist/keyword/remove", { keyword: keyword }).catch(e => { });
     }
 
     public static async saveAlertSettings(): Promise<any> {

@@ -4,9 +4,9 @@ import ServerDetails from "./server-details.provider";
 export default class HTTPClient {
     public static async GET(path: string): Promise<any> {
         return fetch(ServerDetails.rootURL + path, {
-                method: 'GET',
-                headers: await AuthService.getAuthHeader()
-            }
+            method: 'GET',
+            headers: await AuthService.getAuthHeader()
+        }
         ).then((response) =>
             response.json()
         ).catch(e => {
@@ -17,10 +17,10 @@ export default class HTTPClient {
 
     public static async POST(path: string, body: any): Promise<any> {
         return fetch(ServerDetails.rootURL + path, {
-                method: 'POST',
-                headers: await AuthService.getAuthHeader(),
-                body: JSON.stringify(body)
-            }
+            method: 'POST',
+            headers: await AuthService.getAuthHeader(),
+            body: JSON.stringify(body)
+        }
         ).then((response) =>
             response.json()
         ).catch(e => {

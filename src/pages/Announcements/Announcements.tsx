@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import { FlatList, Linking, ListRenderItem, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, NativeScrollEvent } from "react-native";
+import { FlatList, Linking, ListRenderItem, NativeScrollEvent, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DialogManager, { DialogContent, ScaleAnimation } from 'react-native-dialog-component';
 import { Icon, SearchBar } from "react-native-elements";
 import Header from "../../components/Header/Header";
@@ -68,15 +68,15 @@ export default class AnnouncementsPage extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <Header title='Announcements'
-                    nextPageOnPress={() => {
+                    onRightButtonPress={() => {
                         this.showSearch = !this.showSearch
                         if (!this.showSearch)
                             this.update()
                         else
                             this.forceUpdate()
                     }}
-                    nextPageIconSet='feather'
-                    nextPageIcon='search'
+                    rightButtonIcon='search'
+                    rightButtonIconSet='feather'
                     {...this.props} />
                 {this.renderMainContent()}
                 {this.renderSearchbar()}
@@ -97,7 +97,7 @@ export default class AnnouncementsPage extends Component {
                     />
                 }
                 onScroll={synthEvent => {
-                    if (this.isCloseToBottom(synthEvent.nativeEvent))
+                    if (this.isCloseToBottom(synthEvent!.nativeEvent))
                         this.fetchMore()
                 }}
             >

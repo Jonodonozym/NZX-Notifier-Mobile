@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {NavigationActions, StackActions, DrawerItems} from 'react-navigation';
-import {Linking, ScrollView, StyleSheet, Text, View} from 'react-native';
-import Colors from "../theme/colors";
-import {Body, Header, Left, Right} from "native-base";
-import {Icon} from "react-native-elements";
+import { Body, Header, Left } from "native-base";
+import React, { Component } from 'react';
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Icon } from "react-native-elements";
+import { DrawerItems } from 'react-navigation';
 import ServerDetails from "../services/server-details.provider";
+import Colors from "../theme/colors";
 
 export default class DrawerContent extends Component {
     render() {
@@ -15,8 +15,8 @@ export default class DrawerContent extends Component {
                     {this.renderTitle()}
                 </Header>
                 <ScrollView>
-                    <DrawerItems labelStyle={{fontSize: 18}} {...this.props}/>
-                    <Text style={SideMenuStyles.label} onPress={()=>{
+                    <DrawerItems labelStyle={{ fontSize: 18 }} {...this.props} />
+                    <Text style={SideMenuStyles.label} onPress={() => {
                         this.openURL(ServerDetails.NZXURL)
                     }}>NZX Website</Text>
                 </ScrollView>
@@ -27,13 +27,13 @@ export default class DrawerContent extends Component {
     private renderMenuIcon() {
         return (
             <Left style={SideMenuStyles.sides}>
-                <Icon containerStyle={{backgroundColor: Colors.LIGHT_BLUE}}
-                      iconStyle={{paddingLeft: 8}}
-                      size={32}
-                      color={'white'}
-                      underlayColor={Colors.LIGHT_BLUE}
-                      name="menu"
-                      onPress={() => this.props.navigation.closeDrawer()}
+                <Icon containerStyle={{ backgroundColor: Colors.LIGHT_BLUE }}
+                    iconStyle={{ paddingLeft: 8 }}
+                    size={32}
+                    color={'white'}
+                    underlayColor={Colors.LIGHT_BLUE}
+                    name="menu"
+                    onPress={() => this.props.navigation.closeDrawer()}
                 />
             </Left>
         )
@@ -65,8 +65,8 @@ const SideMenuStyles = StyleSheet.create({
     header: {
         backgroundColor: Colors.LIGHT_BLUE,
     },
-    sides: {flex: 0, flexBasis: 48},
-    body: {flex: 1},
+    sides: { flex: 0, flexBasis: 48 },
+    body: { flex: 1 },
     label: {
         fontSize: 18,
         margin: 16,

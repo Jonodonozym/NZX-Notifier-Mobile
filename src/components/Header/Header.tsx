@@ -4,9 +4,9 @@ import { Component } from "react";
 import { ViewStyle } from "react-native";
 import { Navigator } from 'react-navigation';
 import Colors from "../../theme/colors";
-import { HeaderBackArrow } from "./HeaderBackArrow";
-import { HeaderMenuIcon } from "./HeaderMenuIcon";
-import { HeaderNextPageIcon } from "./HeaderNextPageIcon";
+import { HeaderLeftButton } from "./HeaderLeftButton";
+import { HeaderMenuButton } from "./HeaderMenuButton";
+import { HeaderNextPageIcon } from "./HeaderRightButton";
 import { HeaderTitle } from "./HeaderTitle";
 
 type Props = {
@@ -14,14 +14,14 @@ type Props = {
     navigation?: Navigator,
 
 
-    previousPage?: string,
-    previousPageIcon?: string,
-    previousPageIconSet?: string,
+    leftButtonPageLink?: string,
+    leftButtonIcon?: string,
+    leftButtonIconSet?: string,
 
-    nextPageOnPress?: () => any,
-    nextPage?: string,
-    nextPageIcon?: string,
-    nextPageIconSet?: string,
+    onRightButtonPress?: () => any,
+    rightButtonPageLink?: string,
+    rightButtonIcon?: string,
+    rightButtonIconSet?: string,
 }
 
 const sideButtonStyle: ViewStyle = {
@@ -41,12 +41,12 @@ export default class AppHeader extends Component<Props> {
     }
 
     private renderLeftButton() {
-        if (this.props.previousPage)
-            return <HeaderBackArrow {...this.props}></HeaderBackArrow>
+        if (this.props.leftButtonPageLink)
+            return <HeaderLeftButton {...this.props}></HeaderLeftButton>
 
         return (
             <Left style={sideButtonStyle}>
-                <HeaderMenuIcon {...this.props}></HeaderMenuIcon>
+                <HeaderMenuButton {...this.props}></HeaderMenuButton>
             </Left>
         );
 
@@ -61,7 +61,7 @@ export default class AppHeader extends Component<Props> {
     }
 
     private renderRightButton() {
-        if (!this.props.nextPage && !this.props.nextPageOnPress)
+        if (!this.props.rightButtonPageLink && !this.props.onRightButtonPress)
             return (<Right style={sideButtonStyle} />);
         return (<Right style={sideButtonStyle}><HeaderNextPageIcon {...this.props}></HeaderNextPageIcon></Right>)
     }

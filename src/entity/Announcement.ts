@@ -1,5 +1,5 @@
-import {Company} from "./Company";
-import {AnnouncementType} from "../enum/AnnouncementType";
+import { AnnouncementType } from "../enum/AnnouncementType";
+import { Company } from "./Company";
 
 export type Announcement = {
   id: number;

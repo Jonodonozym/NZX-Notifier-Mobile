@@ -1,18 +1,17 @@
-import {Component} from "react";
-import {FlatList, ListRenderItem, StyleSheet, Text, View} from "react-native";
 import * as React from "react";
+import { Component } from "react";
+import { FlatList, ListRenderItem, StyleSheet, Text, View } from "react-native";
+import { Icon } from "react-native-elements";
 import Header from "../../components/Header/Header";
 import UserConfigProvider from "../../services/user-config.provider";
-import {Announcement} from "../../entity/Announcement";
-import {Icon} from "react-native-elements";
 import Colors from "../../theme/colors";
 
 export default class BlacklistKeyword extends Component {
 
     render() {
         return (
-            <View style={{backgroundColor: 'white', flex: 1}}>
-                <Header title='Blacklist Keywords' nextPage='KeywordAdd' {...this.props}/>
+            <View style={{ backgroundColor: 'white', flex: 1 }}>
+                <Header title='Blacklist Keywords' rightButtonPageLink='KeywordAdd' {...this.props} />
                 {this.renderMessageOrList()}
             </View>
         )
@@ -31,22 +30,22 @@ export default class BlacklistKeyword extends Component {
             />);
     }
 
-    private renderItem: ListRenderItem<string> = ({item}) => (
+    private renderItem: ListRenderItem<string> = ({ item }) => (
         <View style={styles.container}>
-            <View style={{flex: 7}}>
+            <View style={{ flex: 7 }}>
                 <Text style={styles.keyword}>{item}</Text>
             </View>
-            <View style={{flex: 1}}>
-                <Icon containerStyle={{backgroundColor: 'white'}}
-                      size={32}
-                      color={Colors.LIGHT_BLUE}
-                      underlayColor='white'
-                      type='entypo'
-                      name='cross'
-                      onPress={() => {
-                          UserConfigProvider.blacklistRemoveKeyword(item);
-                          this.forceUpdate()
-                      }}
+            <View style={{ flex: 1 }}>
+                <Icon containerStyle={{ backgroundColor: 'white' }}
+                    size={32}
+                    color={Colors.LIGHT_BLUE}
+                    underlayColor='white'
+                    type='entypo'
+                    name='cross'
+                    onPress={() => {
+                        UserConfigProvider.blacklistRemoveKeyword(item);
+                        this.forceUpdate()
+                    }}
                 />
             </View>
         </View>

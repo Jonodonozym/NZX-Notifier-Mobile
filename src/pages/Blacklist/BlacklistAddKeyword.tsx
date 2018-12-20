@@ -1,24 +1,27 @@
+import * as React from "react";
 import { Component } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import * as React from "react";
-import Header from "../../components/Header/Header";
-import { NavigationActions, StackActions } from 'react-navigation';
-import UserConfigProvider from "../../services/user-config.provider";
 import { Button } from "react-native-elements";
-import Colors from "../../theme/colors";
+import Header from "../../components/Header/Header";
 import { goToPage } from "../../functions/PageNavigator";
+import UserConfigProvider from "../../services/user-config.provider";
+import Colors from "../../theme/colors";
 
+type Props = {
+    navigation: Navigator
+}
 
-export default class BlacklistAddKeyword extends Component {
+export default class BlacklistAddKeyword extends Component<Props> {
+    private input: string = '';
 
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
-                <Header title='Blacklist Keyword' previousPage='Keyword' {...this.props} />
+                <Header title='Blacklist Keyword' leftButtonPageLink='Keyword' {...this.props} />
                 <Text style={styles.baseText}>Please enter the keyword or{"\n"}phrase you wish to blacklist</Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={(text) => this.state = { text }}
+                    onChangeText={(text) => this.input = text}
                     editable={true}
                     maxLength={40}
                     placeholder={"keyword or phrase"}
@@ -29,8 +32,8 @@ export default class BlacklistAddKeyword extends Component {
                     title="Blacklist Keyword"
                     onPress={() => {
                         console.log(this.state);
-                        if (this.state != null && this.state.text != '')
-                            UserConfigProvider.blacklistAddKeyword(this.state.text).then(() => goToPage(this.props.navigation, 'Keyword'));
+                        if (this.state != null && this.input != '')
+                            UserConfigProvider.blacklistAddKeyword(this.input).then(() => goToPage(this.props.navigation, 'Keyword'));
                         else
                             goToPage(this.props.navigation, 'Keyword')
                     }}

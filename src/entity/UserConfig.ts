@@ -1,6 +1,5 @@
-import {Company} from "./Company";
-import {AnnouncementType} from "../enum/AnnouncementType";
-import {PushNotificationType} from "../enum/PushNotificationType";
+import { AnnouncementType } from "../enum/AnnouncementType";
+import { Company } from "./Company";
 
 export type UserConfig = {
   companyBlacklist: Set<Company>;
