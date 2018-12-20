@@ -8,7 +8,7 @@ export type UserConfig = {
   keywordBlacklist: Set<string>
 
   pushEnabled: boolean;
-  pushType: PushNotificationType;
+  pushType: string;
 
   alertFrequencyMinutes: number;
 

@@ -11,7 +11,7 @@ export default class UserConfigProvider {
         keywordBlacklist: new Set<string>(),
 
         pushEnabled: true,
-        pushType: PushNotificationType.VIBRATE,
+        pushType: PushNotificationType[PushNotificationType.VIBRATE],
 
         alertFrequencyMinutes: 10,
 
@@ -78,7 +78,7 @@ export default class UserConfigProvider {
                 startMinutes: UserConfigProvider.config.quietHoursStartMinutes,
                 endMinutes: UserConfigProvider.config.quietHoursEndMinutes
             }),
-            HTTPClient.POST("alert", {
+            HTTPClient.POST("/config/alert", {
                 frequencyMinutes: UserConfigProvider.config.alertFrequencyMinutes
             })]
         );
