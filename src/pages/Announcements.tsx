@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import { FlatList, Linking, ListRenderItem, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Linking, ListRenderItem, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, NativeScrollEvent } from "react-native";
 import DialogManager, { DialogContent, ScaleAnimation } from 'react-native-dialog-component';
 import { Icon, SearchBar } from "react-native-elements";
 import Header from "../components/Header/Header";
@@ -96,8 +96,8 @@ export default class AnnouncementsPage extends Component {
                         }}
                     />
                 }
-                onScroll={scrollEvent => {
-                    if (this.isCloseToBottom(scrollEvent))
+                onScroll={synthEvent => {
+                    if (this.isCloseToBottom(synthEvent.nativeEvent))
                         this.fetchMore()
                 }}
             >
@@ -106,10 +106,10 @@ export default class AnnouncementsPage extends Component {
         )
     }
 
-    isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    isCloseToBottom = (event: NativeScrollEvent) => {
         const paddingToBottom = 640
-        return layoutMeasurement.height + contentOffset.y >=
-            contentSize.height - paddingToBottom
+        return event.layoutMeasurement.height + event.contentOffset.y >=
+            event.contentSize.height - paddingToBottom
     }
 
     private fetchMore() {
@@ -119,7 +119,6 @@ export default class AnnouncementsPage extends Component {
         this.isRefreshing = true
         let lastID = this.announcements[this.announcements.length - 1].id
         AnnouncementsProvider.getRecent(lastID).then((recent) => {
-            console.log(recent)
             this.setAnnouncements(this.announcements.concat(recent))
         })
     }
@@ -231,10 +230,9 @@ export default class AnnouncementsPage extends Component {
 
     formatTime = function (time: number): string {
         let date: Date = new Date(time)
+        let now: Date = new Date()
 
-        let offset = new Date().getTime() - date.getTime()
-
-        if (offset > (1000 * 3600 * 24))
+        if (now.toDateString() != date.toDateString())
             return date.getDate() + " / " + date.getMonth() + " / " + date.getFullYear()
 
         let hours = date.getHours() % 12
