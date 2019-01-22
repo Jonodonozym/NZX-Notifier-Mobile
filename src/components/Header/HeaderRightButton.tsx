@@ -6,9 +6,9 @@ import { goToPage } from "../../functions/PageNavigator";
 
 
 type Props = {
-    nextPage?: string,
     navigation?: Navigator,
 
+    rightButtonPageLink?: string,
     rightButtonIcon?: string,
     rightButtonIconSet?: string,
     onRightButtonPress?: () => any,
@@ -17,7 +17,7 @@ type Props = {
 export const HeaderNextPageIcon: SFC<Props> = (props) => {
     let name: string = props.rightButtonIcon ? props.rightButtonIcon : "plus";
     let group: string = props.rightButtonIconSet ? props.rightButtonIconSet : "entypo";
-    let onPress: () => any = props.onRightButtonPress ? props.onRightButtonPress : () => goToPage(props.navigation, props.nextPage);
+    let onPress: () => any = props.onRightButtonPress ? props.onRightButtonPress : () => goToPage(props.navigation, props.rightButtonPageLink);
     return (
         <Icon containerStyle={{ backgroundColor: Colors.LIGHT_BLUE }}
             size={32}
