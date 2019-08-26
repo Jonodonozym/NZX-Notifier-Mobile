@@ -6,7 +6,7 @@ export type Announcement = {
   company: Company;
   title: string;
   url: string;
-  pdfurl: string;
+  pdfUrl: string;
   type: AnnouncementType;
   time: number;
 }

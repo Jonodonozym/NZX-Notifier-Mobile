@@ -4,14 +4,14 @@ import { FlatList, View } from "react-native";
 import { CheckBox } from "react-native-elements";
 import Header from "../../components/Header/Header";
 import { AnnouncementType } from "../../enum/AnnouncementType";
-import UserConfigProvider from "../../services/user-config.provider";
+import AppConfig from "../../services/appConfig";
 import Colors from "../../theme/colors";
 
-export default class BlacklistType extends Component {
+export default class FilterType extends Component {
     public render() {
         return (
             <View>
-                <Header title='Blacklist Types' {...this.props} />
+                <Header title='Filter Type' {...this.props} />
                 <FlatList
                     data={this.types()}
                     renderItem={item => this.renderTypeCheckbox(item.item)}
@@ -32,7 +32,7 @@ export default class BlacklistType extends Component {
                 containerStyle={{ paddingLeft: 24, paddingBottom: 8, margin: 0, borderWidth: 0 }}
                 textStyle={{ paddingLeft: 8 }}
                 title={type.toString()}
-                checked={UserConfigProvider.getLocal().typeBlacklist.has(type)}
+                checked={AppConfig.getLocal().typeBlacklist.has(type)}
                 checkedColor={Colors.LIGHT_BLUE}
                 onPress={() => this.onSelectTypeCheckbox(type)}
             />
@@ -40,10 +40,10 @@ export default class BlacklistType extends Component {
     }
 
     private onSelectTypeCheckbox(type: AnnouncementType) {
-        if (UserConfigProvider.getLocal().typeBlacklist.has(type))
-            UserConfigProvider.blacklistRemoveType(type);
+        if (AppConfig.getLocal().typeBlacklist.has(type))
+            AppConfig.blacklistRemoveType(type);
         else
-            UserConfigProvider.blacklistAddType(type);
+            AppConfig.blacklistAddType(type);
         this.forceUpdate()
     }
 }

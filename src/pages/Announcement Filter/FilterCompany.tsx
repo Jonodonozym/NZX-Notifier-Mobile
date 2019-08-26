@@ -4,28 +4,28 @@ import { FlatList, ListRenderItem, StyleSheet, Text, View } from "react-native";
 import { Icon } from "react-native-elements";
 import Header from "../../components/Header/Header";
 import { Company } from "../../entity/Company";
-import UserConfigProvider from "../../services/user-config.provider";
+import AppConfig from "../../services/appConfig";
 import Colors from "../../theme/colors";
 
-export default class BlacklistCompany extends Component {
+export default class FilterCompany extends Component {
     render() {
         return (
             <View style={{ backgroundColor: 'white', flex: 1 }}>
-                <Header title='Blacklist Companies' rightButtonPageLink='CompanyAdd' {...this.props} />
+                <Header title='Filter Company' rightButtonPageLink='CompanyAdd' {...this.props} />
                 {this.renderMessageOrList()}
             </View>
         )
     }
 
     private renderMessageOrList() {
-        if (UserConfigProvider.getLocal().companyBlacklist.size == 0)
+        if (AppConfig.getLocal().companyBlacklist.size == 0)
             return (<Text style={styles.noKeywords}>
-                No companies blacklisted{"\n"}{"\n"}
+                Not filtering any company{"\n"}{"\n"}
                 Add them by pressing the{"\n"}
                 Plus icon</Text>);
         return (
             <FlatList
-                data={Array.from(UserConfigProvider.getLocal().companyBlacklist)}
+                data={Array.from(AppConfig.getLocal().companyBlacklist)}
                 renderItem={this.renderItem}
             />);
     }
@@ -48,7 +48,7 @@ export default class BlacklistCompany extends Component {
                     type='entypo'
                     name='cross'
                     onPress={() => {
-                        UserConfigProvider.blacklistRemoveCompany(item);
+                        AppConfig.blacklistRemoveCompany(item);
                         this.forceUpdate()
                     }}
                 />

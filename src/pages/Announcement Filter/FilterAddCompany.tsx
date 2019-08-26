@@ -6,7 +6,7 @@ import Header from "../../components/Header/Header";
 import { Company } from "../../entity/Company";
 import { goToPage } from "../../functions/PageNavigator";
 import { CompanyProvider } from "../../services/companies.provider";
-import UserConfigProvider from "../../services/user-config.provider";
+import AppConfig from "../../services/appConfig";
 import Colors from "../../theme/colors";
 
 type Props = {
@@ -17,23 +17,23 @@ type State = {
     text: string
 }
 
-export default class BlacklistAddCompany extends Component<Props, State> {
+export default class FilterAddCompany extends Component<Props, State> {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
-                <Header title='Blacklist Company' leftButtonPageLink='Company' {...this.props} />
+                <Header title='Filter Company' leftButtonPageLink='Company' {...this.props} />
                 <Text style={styles.baseText}>Please enter the company{"\n"}name or id you wish to blacklist</Text>
                 {this.renderSearch()}
                 <Button
                     buttonStyle={styles.button}
-                    title="Blacklist Company"
+                    title="Filter Company"
                     onPress={async () => {
                         if (this.state == null || this.state.text == '')
                             goToPage(this.props.navigation, 'Company');
                         else {
                             let c: Company[] = await CompanyProvider.search(this.state.text);
                             if (c != undefined && c.length != 0)
-                                UserConfigProvider.blacklistAddCompany(c[0]).then(() => goToPage(this.props.navigation, 'Company'));
+                                AppConfig.blacklistAddCompany(c[0]).then(() => goToPage(this.props.navigation, 'Company'));
                             else
                                 goToPage(this.props.navigation, 'Company')
                         }
@@ -50,7 +50,7 @@ export default class BlacklistAddCompany extends Component<Props, State> {
                 onChangeText={(text) => this.state = { text }}
                 editable={true}
                 maxLength={40}
-                placeholder={"keyword or phrase"}
+                placeholder={"company code"}
                 autoCorrect={false}
             />
         )

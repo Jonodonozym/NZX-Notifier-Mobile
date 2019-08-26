@@ -1,19 +1,28 @@
 import * as React from "react";
 import { Component } from "react";
-import { FlatList, Linking, ListRenderItem, NativeScrollEvent, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    FlatList,
+    Linking,
+    ListRenderItem,
+    NativeScrollEvent,
+    NetInfo,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import DialogManager, { DialogContent, ScaleAnimation } from 'react-native-dialog-component';
 import { Icon, SearchBar } from "react-native-elements";
 import Header from "../../components/Header/Header";
 import { Announcement } from "../../entity/Announcement";
 import AnnouncementsProvider from "../../services/announcements.provider";
-import AuthService from "../../services/auth.service";
-import UserConfigProvider from "../../services/user-config.provider";
+import AppConfig from "../../services/appConfig";
 import Colors from "../../theme/colors";
+import AnnouncementRepo from "../../services/announcement.repo";
 
 export default class AnnouncementsPage extends Component {
-    private announcements: Array<Announcement> = Array<Announcement>()
-    private isFetching: boolean = true
-    private isConnected: boolean = true
     private isRefreshing: boolean = false
 
     private search: string = ''
@@ -21,46 +30,23 @@ export default class AnnouncementsPage extends Component {
 
     constructor(props: Readonly<{}>) {
         super(props)
-        AuthService.isRegistered().then((registered) => {
-            if (!registered)
-                AuthService.register().then(() => this.update())
-            else {
-                UserConfigProvider.refresh()
-                this.update()
-            }
-        })
+        console.log(AnnouncementRepo.filteredAnnouncements)
+        if (AnnouncementRepo.filteredAnnouncements.length == 0)
+            AppConfig.reload().then(() => this.update()).catch((e)=>console.log(e))
     }
 
     public update() {
+        if (!NetInfo.isConnected)
+            AnnouncementRepo.isConnected = false
+        else if (this.search == '')
+            AnnouncementRepo.setToFirstPage().then(()=>this.displayAnnouncements())
+        else
+            AnnouncementRepo.search(this.search).then(()=>this.displayAnnouncements())
         this.forceUpdate()
-        if (this.search == '')
-            this.checkForErrors(AnnouncementsProvider.getRecent(0).then((ann) => {
-                this.setAnnouncements(ann)
-            }))
-        else
-            this.checkForErrors(AnnouncementsProvider.search(this.search).then((ann) => {
-                this.setAnnouncements(ann)
-            }))
     }
 
-    private checkForErrors(p: Promise<any>) {
-        p.catch((e) => {
-            this.isFetching = false
-            this.isConnected = false
-            this.isRefreshing = false
-            this.announcements = []
-            this.forceUpdate()
-        })
-    }
-
-    public setAnnouncements(announcements: Array<Announcement> | undefined) {
-        this.isFetching = false
-        this.isConnected = true
+    public displayAnnouncements() {
         this.isRefreshing = false
-        if (announcements == null)
-            this.announcements = []
-        else
-            this.announcements = announcements
         this.forceUpdate()
     }
 
@@ -92,7 +78,7 @@ export default class AnnouncementsPage extends Component {
                         refreshing={this.isRefreshing}
                         onRefresh={() => {
                             this.isRefreshing = true
-                            this.update()
+                            AnnouncementRepo.fetchNew().then(()=>this.displayAnnouncements())
                         }}
                     />
                 }
@@ -113,27 +99,24 @@ export default class AnnouncementsPage extends Component {
     }
 
     private fetchMore() {
-        if (this.isFetching || !this.isConnected || this.isRefreshing)
+        if (AnnouncementRepo.isFetching || this.isRefreshing)
             return
 
         this.isRefreshing = true
-        let lastID = this.announcements[this.announcements.length - 1].id
-        AnnouncementsProvider.getRecent(lastID).then((recent) => {
-            this.setAnnouncements(this.announcements.concat(recent))
-        })
+        AnnouncementRepo.fetchNextPage().then(()=>this.displayAnnouncements())
     }
 
     private renderMessageOrList() {
-        if (this.isFetching)
-            return (<Text style={styles.noAnnouncements}>Fetching announcements{"\n"}Please wait...</Text>)
-        if (!this.isConnected)
+        if (!AnnouncementRepo.isConnected)
             return (<Text style={styles.noAnnouncements}>Failed to connect to the server{"\n"}Please check your internet
                 connection{"\n"}or try again later</Text>)
-        if (this.announcements.length == 0)
+        if (AnnouncementRepo.isFetching)
+            return (<Text style={styles.noAnnouncements}>Fetching announcements{"\n"}Please wait...</Text>)
+        if (AnnouncementRepo.filteredAnnouncements.length == 0)
             return (<Text style={styles.noAnnouncements}>No announcements found</Text>)
         return (
             <FlatList
-                data={this.announcements}
+                data={AnnouncementRepo.filteredAnnouncements}
                 renderItem={this.renderItem}
             />)
     }
@@ -145,8 +128,9 @@ export default class AnnouncementsPage extends Component {
                     this.showContextMenu(item)
                 }}
                 onPress={(event) => {
-                    if (item.pdfurl != undefined && item.pdfurl != '')
-                        this.openURL(item.pdfurl)
+                    console.log(item)
+                    if (item.pdfUrl != undefined && item.pdfUrl != '')
+                        this.openURL(item.pdfUrl)
                     else
                         this.openURL(item.url)
                 }}>
@@ -184,16 +168,16 @@ export default class AnnouncementsPage extends Component {
     private popupContent(announcement: Announcement) {
         return (
             <View style={{ marginLeft: 8, marginRight: 8, flexDirection: "column" }}>
-                <TouchableOpacity style={styles.optionWrapper} onPress={() => this.openURL(announcement.pdfurl)}>
+                <TouchableOpacity style={styles.optionWrapper} onPress={() => this.openURL(announcement.pdfUrl)}>
                     <Text style={[styles.optionText, { fontWeight: 'bold' }]}>Open PDF</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.optionWrapper} onPress={() => this.openURL(announcement.url)}>
                     <Text style={[styles.optionText, { fontWeight: 'bold' }]}>Open NZX Site</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.optionWrapper} onPress={() => this.blacklistType(announcement)}>
+                <TouchableOpacity style={styles.optionWrapper} onPress={() => this.more(announcement)}>
                     <Text style={styles.optionText}>More from {announcement.company.id}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.optionWrapper} onPress={() => this.blacklistType(announcement)}>
+                <TouchableOpacity style={styles.optionWrapper} onPress={() => this.blacklistCompany(announcement)}>
                     <Text style={styles.optionText}>Blacklist {announcement.company.id}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.optionWrapper} onPress={() => this.blacklistType(announcement)}>
@@ -212,20 +196,23 @@ export default class AnnouncementsPage extends Component {
 
     private more(a: Announcement) {
         AnnouncementsProvider.search(a.company.id).then((ann) => {
-            this.setAnnouncements(ann)
+            AnnouncementRepo.setAnnouncements(ann)
+            this.forceUpdate()
+        })
+    }
+
+    private blacklistCompany(a: Announcement) {
+        AppConfig.blacklistAddCompany(a.company).then(() => {
+            AnnouncementRepo.updateFilter()
+            this.forceUpdate()
         })
     }
 
     private blacklistType(a: Announcement) {
-        UserConfigProvider.blacklistAddType(a.type).then(() =>
-            this.update()
-        )
-    }
-
-    private blacklistCompany(a: Announcement) {
-        UserConfigProvider.blacklistAddCompany(a.company).then(() =>
-            this.update()
-        )
+        AppConfig.blacklistAddType(a.type).then(() => {
+            AnnouncementRepo.updateFilter()
+            this.forceUpdate()
+        })
     }
 
     formatTime = function (time: number): string {
@@ -233,7 +220,7 @@ export default class AnnouncementsPage extends Component {
         let now: Date = new Date()
 
         if (now.toDateString() != date.toDateString())
-            return date.getDate() + " / " + date.getMonth() + " / " + date.getFullYear()
+            return date.getDate() + " / " + (date.getMonth()+1) + " / " + date.getFullYear()
 
         let hours = date.getHours() % 12
         if (hours == 0)

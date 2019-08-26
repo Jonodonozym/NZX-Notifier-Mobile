@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Icon } from "react-native-elements";
 import { DrawerItems } from 'react-navigation';
-import ServerDetails from "../services/server-details.provider";
+import ServerDetails from "../services/ServerDetails";
 import Colors from "../theme/colors";
 
 export default class DrawerContent extends Component {

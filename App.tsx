@@ -4,15 +4,15 @@ import AnnouncementsPage from "./src/pages/Announcements/Announcements";
 import DrawerContent from "./src/components/DrawerContent"
 import {MenuProvider} from 'react-native-popup-menu';
 import React from "react";
-import Blacklist from "./src/pages/Blacklist/Blacklist";
+import Filter from "./src/pages/Announcement Filter/AnnouncementFilter";
 import AlertSettings from "./src/pages/Alert Settings/AlertSettings";
 
 console.disableYellowBox = true;
 
 const AppDrawerNavigator = createDrawerNavigator({
     Announcements: AnnouncementsPage,
-    Blacklist: Blacklist,
-    "Alert Settings": AlertSettings
+    "Announcement Filter": Filter,
+    "Notification Config": AlertSettings
 }, {
     contentComponent: DrawerContent
 });

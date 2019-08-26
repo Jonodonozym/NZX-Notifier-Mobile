@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { CheckBox } from "react-native-elements";
 import AppHeader from "../../components/Header/Header";
 import { PushNotificationType } from "../../enum/PushNotificationType";
-import UserConfigProvider from "../../services/user-config.provider";
+import AppConfig from "../../services/appConfig";
 import Colors from "../../theme/colors";
 
 type SectionProps = {
@@ -55,16 +55,16 @@ export default class AlertSettings extends Component {
     }
 
     private renderPushSection() {
-        console.log(UserConfigProvider.getLocal().pushType)
-        console.log(typeof (UserConfigProvider.getLocal().pushType))
+        console.log(AppConfig.getLocal().pushType)
+        console.log(typeof (AppConfig.getLocal().pushType))
         return (
             <View>
                 <CheckBox
                     title={"Enable Notifications"}
-                    checked={UserConfigProvider.getLocal().pushEnabled}
+                    checked={AppConfig.getLocal().pushEnabled}
                     onPress={() => {
-                        UserConfigProvider.getLocal().pushEnabled = !UserConfigProvider.getLocal().pushEnabled
-                        UserConfigProvider.saveAlertSettings()
+                        AppConfig.getLocal().pushEnabled = !AppConfig.getLocal().pushEnabled
+                        AppConfig.save()
                         this.forceUpdate()
                     }}
 
@@ -86,16 +86,16 @@ export default class AlertSettings extends Component {
     }
 
     private radioButton(type: PushNotificationType, label: string) {
-        let pushEnabled: boolean = UserConfigProvider.getLocal().pushEnabled;
+        let pushEnabled: boolean = AppConfig.getLocal().pushEnabled;
         return (
             <CheckBox
                 title={label}
-                checked={UserConfigProvider.getLocal().pushType == PushNotificationType[type]}
+                checked={AppConfig.getLocal().pushType == PushNotificationType[type]}
                 onPress={() => {
                     if (!pushEnabled)
                         return;
-                    UserConfigProvider.getLocal().pushType = PushNotificationType[type]
-                    UserConfigProvider.saveAlertSettings()
+                    AppConfig.getLocal().pushType = PushNotificationType[type]
+                    AppConfig.save()
                     this.forceUpdate()
                 }}
 

@@ -4,20 +4,20 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import { Button } from "react-native-elements";
 import Header from "../../components/Header/Header";
 import { goToPage } from "../../functions/PageNavigator";
-import UserConfigProvider from "../../services/user-config.provider";
+import AppConfig from "../../services/appConfig";
 import Colors from "../../theme/colors";
 
 type Props = {
     navigation: Navigator
 }
 
-export default class BlacklistAddKeyword extends Component<Props> {
+export default class FilterAddKeyword extends Component<Props> {
     private input: string = '';
 
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
-                <Header title='Blacklist Keyword' leftButtonPageLink='Keyword' {...this.props} />
+                <Header title='Filter Keyword' leftButtonPageLink='Keyword' {...this.props} />
                 <Text style={styles.baseText}>Please enter the keyword or{"\n"}phrase you wish to blacklist</Text>
                 <TextInput
                     style={styles.input}
@@ -29,11 +29,11 @@ export default class BlacklistAddKeyword extends Component<Props> {
                 />
                 <Button
                     buttonStyle={styles.button}
-                    title="Blacklist Keyword"
+                    title="Filter Keyword"
                     onPress={() => {
-                        console.log(this.state);
-                        if (this.state != null && this.input != '')
-                            UserConfigProvider.blacklistAddKeyword(this.input).then(() => goToPage(this.props.navigation, 'Keyword'));
+                        console.log(this.input);
+                        if (this.input != '')
+                            AppConfig.blacklistAddKeyword(this.input).then(() => goToPage(this.props.navigation, 'Keyword'));
                         else
                             goToPage(this.props.navigation, 'Keyword')
                     }}

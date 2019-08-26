@@ -1,14 +1,14 @@
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import Colors from "../../theme/colors";
-import BlacklistAddCompany from "./BlacklistAddCompany";
-import BlacklistAddKeyword from "./BlacklistAddKeyword";
-import BlacklistCompany from "./BlacklistCompany";
-import BlacklistKeyword from "./BlacklistKeyword";
-import BlacklistType from "./BlacklistType";
+import FilterAddCompany from "./FilterAddCompany";
+import FilterAddKeyword from "./FilterAddKeyword";
+import FilterCompany from "./FilterCompany";
+import FilterKeyword from "./FilterKeyword";
+import FilterType from "./FilterType";
 
 const KeywordNav = createStackNavigator({
-    Keyword: BlacklistKeyword,
-    KeywordAdd: BlacklistAddKeyword,
+    Keyword: FilterKeyword,
+    KeywordAdd: FilterAddKeyword,
 }, {
         headerMode: 'none',
         navigationOptions: {
@@ -17,8 +17,8 @@ const KeywordNav = createStackNavigator({
     });
 
 const CompanyNav = createStackNavigator({
-    Company: BlacklistCompany,
-    CompanyAdd: BlacklistAddCompany,
+    Company: FilterCompany,
+    CompanyAdd: FilterAddCompany,
 }, {
         headerMode: 'none',
         navigationOptions: {
@@ -28,7 +28,7 @@ const CompanyNav = createStackNavigator({
 
 const BlacklistNav = createBottomTabNavigator({
     Company: CompanyNav,
-    Type: BlacklistType,
+    Type: FilterType,
     Keyword: KeywordNav
 }, {
         tabBarOptions: {

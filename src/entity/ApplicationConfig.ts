@@ -1,7 +1,7 @@
 import { AnnouncementType } from "../enum/AnnouncementType";
 import { Company } from "./Company";
 
-export type UserConfig = {
+export type ApplicationConfig = {
   companyBlacklist: Set<Company>;
   typeBlacklist: Set<AnnouncementType>;
   keywordBlacklist: Set<string>

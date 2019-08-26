@@ -1,25 +1,13 @@
-import AuthService from "./auth.service";
-import ServerDetails from "./server-details.provider";
+import ServerDetails from "./ServerDetails";
 
 export default class HTTPClient {
     public static async GET(path: string): Promise<any> {
         return fetch(ServerDetails.rootURL + path, {
             method: 'GET',
-            headers: await AuthService.getAuthHeader()
-        }
-        ).then((response) =>
-            response.json()
-        ).catch(e => {
-            console.log(e);
-            throw e
-        });
-    }
-
-    public static async POST(path: string, body: any): Promise<any> {
-        return fetch(ServerDetails.rootURL + path, {
-            method: 'POST',
-            headers: await AuthService.getAuthHeader(),
-            body: JSON.stringify(body)
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
         }
         ).then((response) =>
             response.json()
