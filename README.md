@@ -14,9 +14,3 @@ The back-end server was built using Spring Boot in Java, and can be found [here]
 
 # Media
 [Youtube demo](https://www.youtube.com/watch?v=igbMxZ82khQ&feature=youtu.be)
-
-<a href="url">
-  <img src="https://puu.sh/CAoVt/8fc342d869.jpg" height="480" width="270">
-  <img src="https://puu.sh/CAoVs/b15b4b4f99.jpg" height="480" width="270">
-  <img src="https://puu.sh/CAoVm/6d7a815ff1.jpg" height="480" width="270">
-</a>
